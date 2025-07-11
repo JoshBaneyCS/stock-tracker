@@ -1,4 +1,4 @@
-FROM golang:1.20
+FROM golang:1.23
 
 # Install Python, venv, and pip
 RUN apt-get update && \
