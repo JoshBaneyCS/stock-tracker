@@ -7,13 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: stock-backend
     ports:
-      - "8080:8080"
-    volumes:
-      - ./backend:/app
-    environment:
-      - PORT=8080
-    networks:
-      - stocknet
+      - "80808:8080"
+    restart: unless-stopped
 
   frontend:
     build:
@@ -21,11 +16,8 @@ services:
       dockerfile: Dockerfile
     container_name: stock-frontend
     ports:
-      - "3000:80"
-    networks:
-      - stocknet
-    depends_on:
-      - backend
+      - "33000:80"
+    restart: unless-stopped
 
 networks:
   stocknet:
