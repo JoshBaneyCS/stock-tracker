@@ -1,12 +1,23 @@
-# Build Stage
-FROM node:18 as build
+# Use Node LTS image
+FROM node:18
+
+# Set working directory
 WORKDIR /app
-COPY . .
+
+# Copy package files
+COPY frontend/package*.json ./
+
+# Install dependencies
 RUN npm install
+
+# Copy the rest of the app
+COPY frontend/ .
+
+# Build the app for production
 RUN npm run build
 
-# Serve Stage
+# Use Nginx to serve the built frontend
 FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=0 /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
