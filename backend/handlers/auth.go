@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"stock-tracker/backend/models"
+	"backend/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
