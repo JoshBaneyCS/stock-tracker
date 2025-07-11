@@ -1,23 +1,17 @@
-# Use Node LTS image
-FROM node:18
+# Build phase
+FROM node:20-alpine as build
 
-# Set working directory
 WORKDIR /app
-
-# Copy package files
-COPY frontend/package*.json ./
-
-# Install dependencies
+COPY . .
 RUN npm install
-
-# Copy the rest of the app
-COPY frontend/ .
-
-# Build the app for production
 RUN npm run build
 
-# Use Nginx to serve the built frontend
-FROM nginx:alpine
-COPY --from=0 /app/build /usr/share/nginx/html
+# Production phase
+FROM nginx:1.25-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Replace default nginx config if needed
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
