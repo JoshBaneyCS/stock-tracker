@@ -1,25 +1,23 @@
-FROM golang:1.23-bullseye
+# Use Go 1.23 image
+FROM golang:1.23
 
-# Install Python & dependencies
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip python3-venv && \
-    apt-get clean
-
+# Set working directory inside container
 WORKDIR /app
 
-# Copy files
-COPY . .
+# Copy go.mod and go.sum before code to cache dependencies
+COPY backend/go.mod backend/go.sum ./
 
-# Create virtual environment & install Python requirements
-RUN python3 -m venv /app/venv && \
-    . /app/venv/bin/activate && \
-    /app/venv/bin/pip install --upgrade pip && \
-    /app/venv/bin/pip install -r requirements.txt
-
-# Tidy Go modules
+# Tidy dependencies
 RUN go mod tidy
 
-# Build Go app
+# Copy backend source code
+COPY backend/ .
+
+# Build the server binary
 RUN go build -o server .
 
+# Expose the API port
+EXPOSE 8080
+
+# Run the backend server
 CMD ["./server"]
