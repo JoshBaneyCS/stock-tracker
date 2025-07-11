@@ -1,4 +1,4 @@
-FROM golang:1.20
+FROM golang:1.22-bullseye
 
 # Install Python & dependencies
 RUN apt-get update && \
