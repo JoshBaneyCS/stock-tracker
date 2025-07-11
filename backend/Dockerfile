@@ -1,21 +1,23 @@
-# Use Go base image
-FROM golang:1.24 
-# changes above
+# Use official Golang image
+FROM golang:1.20
 
-# Set the working directory inside the container
-WORKDIR /go/src/backend
+# Set working directory inside the container
+WORKDIR /app
 
-# Copy everything from backend/ into the container
-COPY . .
+# Copy go.mod and go.sum first to cache dependencies
+COPY go.mod go.sum ./
 
-# Download Go module dependencies
+# Download dependencies
 RUN go mod tidy
 
-# Build the Go backend binary
+# Copy the rest of the source code
+COPY . .
+
+# Build the Go binary
 RUN go build -o server .
 
-# Expose backend service port (adjust as needed)
+# Expose port for the Go server
 EXPOSE 8080
 
-# Run the compiled binary
+# Run the compiled server binary
 CMD ["./server"]
