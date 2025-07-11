@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"stock-tracker/backend/models"
+	"backend/models"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
