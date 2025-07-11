@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os/exec"
-	"stocktracker/models"
+	"backend/models"
 
 	"github.com/gin-gonic/gin"
 )
