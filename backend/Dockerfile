@@ -1,23 +1,25 @@
-# Use official Golang image
-FROM golang:1.23
+FROM golang:1.20
 
-# Set working directory inside the container
+# Install Python & dependencies
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-venv && \
+    apt-get clean
+
 WORKDIR /app
 
-# Copy go.mod and go.sum first to cache dependencies
-COPY go.mod go.sum ./
-
-# Download dependencies
-RUN go mod tidy
-
-# Copy the rest of the source code
+# Copy files
 COPY . .
 
-# Build the Go binary
+# Create virtual environment & install Python requirements
+RUN python3 -m venv /app/venv && \
+    . /app/venv/bin/activate && \
+    /app/venv/bin/pip install --upgrade pip && \
+    /app/venv/bin/pip install -r requirements.txt
+
+# Tidy Go modules
+RUN go mod tidy
+
+# Build Go app
 RUN go build -o server .
 
-# Expose port for the Go server
-EXPOSE 8080
-
-# Run the compiled server binary
 CMD ["./server"]
