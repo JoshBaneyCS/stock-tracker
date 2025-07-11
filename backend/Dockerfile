@@ -5,7 +5,7 @@ FROM golang:1.23
 WORKDIR /app
 
 # Copy go.mod and go.sum before code to cache dependencies
-COPY backend/go.mod backend/go.sum ./
+COPY  go.mod go.sum ./
 
 # Tidy dependencies
 RUN go mod tidy
