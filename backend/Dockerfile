@@ -4,20 +4,20 @@ FROM golang:1.23-bullseye
 # Set working directory inside the container
 WORKDIR /app
 
-# Copy go.mod and go.sum to leverage Docker cache
-COPY go.mod go.sum ./
+# Copy go.mod and go.sum
+COPY ./go.mod ./go.sum ./
 
-# Download Go modules
+# Download Go dependencies
 RUN go mod tidy
 
-# Copy the rest of the application source code
+# Copy the full source code into the container
 COPY . .
 
-# Build the Go application
+# Build the Go binary
 RUN go build -o server .
 
-# Expose the application port
+# Expose backend port
 EXPOSE 8080
 
-# Start the server
-CMD ["/app/server"]
+# Run the compiled binary
+CMD ["./server"]
