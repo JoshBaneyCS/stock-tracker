@@ -1,26 +1,20 @@
-FROM golang:1.24.5
+# Use Go base image
+FROM golang:1.20
 
-# Install Python, venv, and pip
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip python3-venv && \
-    apt-get clean
+# Set the working directory inside the container
+WORKDIR /go/src/backend
 
-# Set working directory
-WORKDIR /app
-
-# Copy backend source code
+# Copy everything from backend/ into the container
 COPY . .
 
-# Create a virtual environment and install Python dependencies
-RUN python3 -m venv /app/venv && \
-    . /app/venv/bin/activate && \
-    /app/venv/bin/pip install --no-cache-dir -r requirements.txt
+# Download Go module dependencies
+RUN go mod tidy
 
-# Build Go server
+# Build the Go backend binary
 RUN go build -o server .
 
-# Expose port
+# Expose backend service port (adjust as needed)
 EXPOSE 8080
 
-# Run the Go app and keep the Python venv active
-CMD ["/app/server"]
+# Run the compiled binary
+CMD ["./server"]
