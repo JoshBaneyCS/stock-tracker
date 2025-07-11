@@ -1,23 +1,23 @@
-# Use official Golang image with Go 1.23
+# Use Golang 1.23 base image
 FROM golang:1.23-bullseye
 
-# Set the working directory inside the container
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy go.mod and go.sum before other files to leverage Docker caching
+# Copy go.mod and go.sum to leverage Docker cache
 COPY go.mod go.sum ./
 
-# Download Go module dependencies
+# Download Go modules
 RUN go mod tidy
 
-# Copy the rest of the backend source code
+# Copy the rest of the application source code
 COPY . .
 
-# Build the Go backend binary
+# Build the Go application
 RUN go build -o server .
 
-# Expose port used by the Go server
+# Expose the application port
 EXPOSE 8080
 
-# Set the command to run the compiled server binary
-CMD ["./server"]
+# Start the server
+CMD ["/app/server"]
