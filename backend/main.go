@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"handlers"
-	"stock-tracker/backend/middleware"
-	"stock-tracker/backend/models"
+	"backend/middleware"
+	"backend/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
