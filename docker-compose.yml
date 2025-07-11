@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: stock-backend
     ports:
-      - "80808:8080"
+      - "21227:8080"
     restart: unless-stopped
 
   frontend:
@@ -16,7 +16,7 @@ services:
       dockerfile: Dockerfile
     container_name: stock-frontend
     ports:
-      - "33000:80"
+      - "21229:80"
     restart: unless-stopped
 
 networks:
