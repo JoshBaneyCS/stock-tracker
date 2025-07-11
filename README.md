@@ -8,29 +8,29 @@ A full-stack, real-time stock tracking and alerting web application built with *
 
 stock-tracker/
 ├── backend/
-│ ├── handlers/ # API route handlers
-│ ├── middleware/ # JWT middleware
-│ ├── models/ # Database models
-│ ├── utils/ # Email, IP, and currency helpers
-│ ├── stock_fetcher.py # Python script using yFinance
-│ ├── main.go # Go server entrypoint
-│ └── requirements.txt # Python dependencies
+│   ├── main.go
+│   ├── handlers/
+│   ├── models/
+│   ├── middleware/
+│   ├── utils/
+│   ├── stock_fetcher.py
+│   ├── requirements.txt
+│   └── go.mod
 │
 ├── frontend/
-│ ├── public/ # index.html and particles.js config
-│ ├── src/
-│ │ ├── pages/ # Login, Register, Dashboard, Settings
-│ │ ├── components/ # Graph, InfoBox, Header
-│ │ └── index.js # React entrypoint
-│ ├── Dockerfile # React + Nginx Docker image
-│ └── package.json # React app dependencies
+│   ├── public/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   └── index.js
+│   ├── Dockerfile
+│   └── package.json
 │
 ├── db/
-│ └── schema.sql # MySQL DB schema
-│
-├── .env # Environment variables
-├── docker-compose.yml # Docker orchestration
-└── README.md # This file
+│   └── schema.sql
+├── .env
+├── docker-compose.yml
+└── README.md
 
 ---
 
