@@ -1,21 +1,26 @@
 FROM golang:1.20
 
-# Install Python
+# Install Python, venv, and pip
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
+    apt-get install -y python3 python3-pip python3-venv && \
     apt-get clean
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Copy Go backend
+# Copy backend source code
 COPY . .
 
-# Install Python deps
-RUN pip3 install -r requirements.txt
+# Create a virtual environment and install Python dependencies
+RUN python3 -m venv /app/venv && \
+    . /app/venv/bin/activate && \
+    /app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Build Go server
 RUN go build -o server .
 
+# Expose port
 EXPOSE 8080
-CMD ["./server"]
+
+# Run the Go app and keep the Python venv active
+CMD ["/app/server"]
