@@ -1,37 +1,21 @@
-version: '3.8'
-
 services:
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
-    working_dir: /app
+      context: ./backend
+    container_name: backend
     ports:
       - "8080:8080"
-    command: ["./server"]
-    depends_on:
-      - db
+    networks:
+      - stocknet
+
   frontend:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+    container_name: frontend
     ports:
-      - "3000:80" # external:container
-    depends_on:
-      - backend
+      - "3000:80"
+    networks:
+      - stocknet
 
-  db:
-    image: mysql:8
-    container_name: mysql-db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: stocktracker
-      MYSQL_USER: stockuser
-      MYSQL_PASSWORD: stockpass
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-
-volumes:
-  mysql-data:
+networks:
+  stocknet:
