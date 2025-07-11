@@ -2,53 +2,32 @@ version: "3.9"
 
 services:
   backend:
-    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: stock-backend
     ports:
-      - "11549:8080"
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PORT=8080
     networks:
       - stocknet
-    environment:
-      - DB_HOST=mysql
-      - DB_USER=youruser
-      - DB_PASS=yourpass
-      - DB_NAME=yourdb
-    depends_on:
-      - mysql
 
   frontend:
-    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: stock-frontend
     ports:
-      - "30301:80"
+      - "3000:80"
     networks:
       - stocknet
-    environment:
-      - REACT_APP_API_URL=http://backend:8080
-
-  mysql:
-    image: mysql:8
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: yourdb
-      MYSQL_USER: youruser
-      MYSQL_PASSWORD: yourpass
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - stocknet
-
-volumes:
-  mysql_data:
+    depends_on:
+      - backend
 
 networks:
   stocknet:
     driver: bridge
+
