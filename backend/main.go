@@ -1,60 +1,46 @@
 package main
 
 import (
+	"backend/handlers"
+	"backend/middleware"
 	"log"
 	"os"
-
-	"handlers"
-	"backend/middleware"
-	"backend/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Load environment variables
+	// Load environment variables from .env file
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("No .env file found. Using environment vars.")
+		log.Println("Warning: .env file not found. Continuing without it.")
 	}
 
-	// Connect to DB
-	models.ConnectDatabase()
-
-	// Init router
+	// Create a new Gin router
 	r := gin.Default()
 
 	// Public routes
 	r.POST("/register", handlers.Register)
 	r.POST("/login", handlers.Login)
 
-	// Authenticated routes
+	// Protected routes
 	auth := r.Group("/api")
 	auth.Use(middleware.JWTAuthMiddleware())
 	{
 		auth.GET("/me", handlers.GetProfile)
 		auth.POST("/logout", handlers.Logout)
-
-		auth.GET("/favorites", handlers.GetFavorites)
-		auth.POST("/favorites", handlers.SetFavorites)
-
-		auth.GET("/stocks", handlers.GetStockData)
-		auth.GET("/stock-history/:symbol", handlers.GetStockHistory)
-
-		auth.GET("/settings", handlers.GetSettings)
-		auth.POST("/settings", handlers.UpdateSettings)
-
-		auth.POST("/alerts", handlers.CreateAlert)
-		auth.GET("/alerts", handlers.GetAlerts)
-		auth.DELETE("/alerts/:id", handlers.DeleteAlert)
+		// Add more authenticated routes here (e.g. stock routes)
 	}
 
+	// Start server on port from environment or default to 8080
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-
-	log.Printf("Server running on port %s", port)
-	r.Run(":" + port)
+	log.Printf("Server starting on port %s...", port)
+	err = r.Run(":" + port)
+	if err != nil {
+		log.Fatalf("Could not start server: %v", err)
+	}
 }

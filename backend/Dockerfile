@@ -1,5 +1,6 @@
 # Use Go base image
-FROM golang:1.20
+FROM golang:1.24 
+# changes above
 
 # Set the working directory inside the container
 WORKDIR /go/src/backend
